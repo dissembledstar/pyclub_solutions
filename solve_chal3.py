@@ -2,13 +2,13 @@
 
 # we assume python 2.7
 
-#TODO optimize s.t. we break after finding the username and pass
 
 import requests
+import json
 import base64
 import re # now we have 2 problems
 
-resp = requests.get('http://thepythonclub.org:8080/challenge3')
+resp = requests.get('http://thepythonclub.org:8083/challenge3')
 
 # grab the username we need
 target_user = resp.text.split('"')[1]
@@ -47,7 +47,7 @@ data = resp.content.split('\n')
 # find our password
 for line in data:
 	if user_id in line :
-	# grab the userid
+	# grab the password
 		enc_passwd = line.split(':')[1]
 		passwd = base64.b64decode(enc_passwd)
 		print "Sick, found password:" + passwd 
@@ -60,5 +60,6 @@ solution = passwd
 print
 print "Sending solution: " + str(solution)
 payload = {'answer' : solution }
-resp = requests.post('http://thepythonclub.org:8080/challenge3', params=payload, data=payload)
+print json.dumps(payload)
+resp = requests.post('http://thepythonclub.org:8083/challenge3', data=json.dumps(payload))
 print resp.text
