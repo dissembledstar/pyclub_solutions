@@ -2,7 +2,6 @@
 
 # we assume python 2.7
 
-
 import requests
 import json
 import base64
@@ -12,54 +11,42 @@ resp = requests.get('http://thepythonclub.org:8083/challenge3')
 
 # grab the username we need
 target_user = resp.text.split('"')[1]
-user_id= ""
-passwd= ""
+target_userid = ""
+passwd = ""
+solution = ""
 
 print "Going after: " + target_user
 
 # grab the links
-urls = re.findall('http.*?txt',resp.text)
+urls = re.findall('http.*?json',resp.text)
 
 # grab our userid file
 user_file = urls[0]
 
 resp = requests.get(user_file)
 
-# split out our lines
-data = resp.content.split('\n')
-
 # find our user
-for line in data:
-	if target_user in line :
-	# grab the userid
-		user_id = line.split('"')[1]
-		print "Cool, found userid: " + user_id
-		break	
+data = json.loads (resp.content)
+for userid, info_dict in data.items():
+	if info_dict [ 'Name' ]  == target_user :
+		target_userid = userid
+		print "Cool, found userid: " + target_userid
 
 # grab our passwd file
 passwd_file = urls[1]
 
 resp = requests.get(passwd_file)
 
-# split out our lines
-data = resp.content.split('\n')
-
 # find our password
-for line in data:
-	if user_id in line :
-	# grab the password
-		enc_passwd = line.split(':')[1]
-		passwd = base64.b64decode(enc_passwd)
-		print "Sick, found password:" + passwd 
+data = json.loads (resp.content)
+
+for userid, password in data.iteritems():
+	if userid == target_userid :
+		solution = base64.b64decode(password)
+		print "Sick, found password:" + solution 
 		break
 
-# hooray!
-solution = passwd
-
 # send the answer
-print
-print "Sending solution: " + str(solution)
 payload = {'answer' : solution }
-print json.dumps(payload)
 resp = requests.post('http://thepythonclub.org:8083/challenge3', data=json.dumps(payload))
 print resp.text
