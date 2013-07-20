@@ -3,7 +3,6 @@
 # we assume python 2.7
 
 import requests
-import ast
 
 # incomplete list, good enough to solve at least once
 wordlist = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen']
