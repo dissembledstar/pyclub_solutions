@@ -4,6 +4,7 @@
 
 import requests
 import base64 
+import json 
 resp = requests.get('http://thepythonclub.org:8081/challenge1')
 
 #print "DBG: |" + resp.text + "|"
@@ -20,5 +21,5 @@ dec_text = base64.b64decode (enc_text)
 
 # send the answer
 payload = {'answer' : dec_text }
-resp = requests.post('http://thepythonclub.org:8081/challenge1', data=payload)
+resp = requests.post('http://thepythonclub.org:8081/challenge1', data=json.dumps(payload))
 print resp.text

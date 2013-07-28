@@ -3,6 +3,7 @@
 # we assume python 2.7
 
 import requests
+import json
 
 # incomplete list, good enough to solve at least once
 wordlist = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen']
@@ -42,5 +43,5 @@ solution = wordlist[solution]
 # send the answer
 print "Sending solution: " + str(solution)
 payload = {'answer' : solution }
-resp = requests.post('http://thepythonclub.org:8082/challenge2', data=payload)
+resp = requests.post('http://thepythonclub.org:8082/challenge2', data=json.dumps(payload))
 print resp.text
